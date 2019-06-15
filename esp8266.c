@@ -44,7 +44,7 @@ void setup()
   //Photo resolution for Photo Modes (incl. SubModes): 12MP Wide:
   RequestGoProURL("/gp/gpControl/setting/17/0");
   delay(500);
-  //See other settings you would like to ajust at: https://github.com/KonradIT/goprowifihack/blob/master/HERO4/WifiCommands.md
+  //See other settings you would like to adjust at: https://github.com/KonradIT/goprowifihack/blob/master/HERO4/WifiCommands.md
 }
  
 void RequestGoProURL(String GoProURL)
