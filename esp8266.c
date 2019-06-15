@@ -11,7 +11,6 @@ const char* gopro_host = "10.5.5.9"; //GoPro Hero 4 IP Address
 
 int triggerPin = 0; //Input pin
 int pinState;
-int triggerState = 0;
 
 void setup()
 {
