@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Patrick Duhaime, Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Solo 3DR - Emlid Reach M+ controller</title>
+
+
+    <!-- Bootstrap core CSS -->
+	<link href="bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="solo3DR.css" rel="stylesheet">
+	<script type="text/javascript" src="solo3DR.js"></script>
+		<script>
+	window.onload = function(){ 
+	
+		var button = document.getElementById('burstModeEnableButton');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('timelapseModeEnableButton');
+		button.onclick = sendRequestWithParams;
+		
+		var button = document.getElementById('nightlapseModeEnableButton');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('resolution');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('whiteBalance');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('isoLimitButton');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('isoMinButton');
+		button.onclick = sendRequestWithParams;
+
+		var button = document.getElementById('evStepButton');
+		button.onclick = sendRequestWithParams;
+		
+		var burstModeEnabling_request = new XMLHttpRequest();
+		var timelapseModeEnabling_request = new XMLHttpRequest();
+		var nightlapseModeEnabling_request = new XMLHttpRequest();
+		var setResolution_request = new XMLHttpRequest();
+		var setWhiteBalance_request = new XMLHttpRequest();
+		var isoLimit_request = new XMLHttpRequest();
+		var isoMin_request = new XMLHttpRequest();
+		var evSteps_request = new XMLHttpRequest();
+		var dropFonction;
+		
+		$(".dropdown-menu li").click(function(elem){
+		$(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+		$(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+
+			dropFonction = elem.target.parentNode.id;
+			var valeur = $(this).data('value');
+
+			switch(dropFonction) {
+			case "burstModeEnable":
+				burstModeEnabling(valeur);
+			break;
+			case "timelapseModeEnable":
+				timelapseModeEnabling(valeur);
+			break;
+			case "nightlapseModeEnable":
+				nightlapseModeEnabling(valeur);
+			break;
+			case "setResolution":
+				setResolution(valeur);
+			break;
+			case "setWhiteBalance":
+				setWhiteBalance(valeur);
+			break;
+			case "isoLimit":
+				isoLimit(valeur);
+			break;
+			case "isoMin":
+				isoMin(valeur);
+			break;
+			case "evSteps":
+				evSteps(valeur);
+			break;
+			default:
+			break;
+			}
+		});
+		
+		function sendRequestWithParams() {
+		
+			console.log("in sendRequestWithParams() " + dropFonction);
+			switch(dropFonction) {
+				case "burstModeEnable":
+					burstModeEnabling_request.send();
+				break;
+				case "timelapseModeEnable":
+					timelapseModeEnabling_request.send();
+				break;
+				case "nightlapseModeEnable":
+					nightlapseModeEnabling_request.send();
+				break;
+				case "setResolution":
+					setResolution_request.send();
+				break;
+				case "setWhiteBalance":
+					setWhiteBalance_request.send();
+				break;
+				case "isoLimit":
+					isoLimit_request.send();
+				break;
+				case "isoMin":
+					isoMin_request.send();
+				break;
+				case "evSteps":
+					evSteps_request.send();
+				break;
+				default:
+				break;
+			}
+		}
+		
+		function burstModeEnabling(valeur)
+		{						
+			switch(valeur) {
+			  case 1:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/0",true);
+				break;
+			  case 2:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/1",true);
+				break;
+			  case 3:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/2",true);				
+				break;
+			  case 4:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/3",true);
+				break;
+			  case 5:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/4",true);
+				break;
+			  case 6:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/5",true);				
+				break;
+			  case 7:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/6",true);
+				break;
+			  case 8:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/7",true);
+				break;
+			  case 9:
+				burstModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/29/8",true);				
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function timelapseModeEnabling(valeur)
+		{						
+			switch(valeur) {
+			  case 0.5:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/0",true);
+				break;
+			  case 1:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/1",true);
+				break;
+			  case 2:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/2",true);
+				break;
+			  case 5:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/5",true);
+				break;
+			  case 10:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/10",true);
+				break;
+			  case 30:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/30",true);
+				break;
+			  case 60:
+				timelapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/30/60",true);				
+				break;
+			  default:
+				break;
+			}
+		}
+		
+		function nightlapseModeEnabling(valeur)
+		{						
+			switch(valeur) {
+			  case 0:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/0",true);
+				break;
+			  case 1:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/4",true);
+				break;
+			  case 2:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/5",true);
+				break;
+			  case 3:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/10",true);
+				break;
+			  case 4:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/15",true);
+				break;
+			  case 5:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/20",true);
+				break;
+			  case 6:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/30",true);				
+				break;
+			  case 7:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/60",true);
+				break;
+			  case 8:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/120",true);
+				break;
+			  case 9:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/300",true);
+				break;
+			  case 10:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/1800",true);
+				break;
+			  case 11:
+				nightlapseModeEnabling_request.open("GET","http://10.5.5.9/gp/gpControl/setting/32/3600",true);				
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function setResolution(valeur)
+		{						
+			switch(valeur) {
+			  case 12:
+				setResolution_request.open("GET","http://10.5.5.9/gp/gpControl/setting/28/0",true);
+				break;
+			  case 6:
+				setResolution_request.open("GET","http://10.5.5.9/gp/gpControl/setting/28/1",true);
+				break;
+			  case 7:
+				setResolution_request.open("GET","http://10.5.5.9/gp/gpControl/setting/28/2",true);
+				break;
+			  case 5:
+				setResolution_request.open("GET","http://10.5.5.9/gp/gpControl/setting/28/3",true);				;				
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function setWhiteBalance(valeur)
+		{			
+			switch(valeur) {
+			  case 0:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/0",true);
+				break;
+			  case 3000:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/1",true);
+				break;
+			  case 4000:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/5",true);
+				break;
+			  case 4800:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/6",true);
+				break;
+			  case 5500:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/2",true);
+				break;
+			  case 6000:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/7",true);
+				break;
+			  case 6500:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/3",true);
+				break;
+			  case 1:
+				setWhiteBalance_request.open("GET","http://10.5.5.9/gp/gpControl/setting/35/4",true);				
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function isoLimit(valeur)
+		{						
+			switch(valeur) {
+			  case 800:
+				isoLimit_request.open("GET","http://10.5.5.9/gp/gpControl/setting/37/0",true);
+				break;
+			  case 400:
+				isoLimit_request.open("GET","http://10.5.5.9/gp/gpControl/setting/37/1",true);
+				break;
+			  case 200:
+				isoLimit_request.open("GET","http://10.5.5.9/gp/gpControl/setting/37/2",true);
+				break;
+			  case 100:
+				isoLimit_request.open("GET","http://10.5.5.9/gp/gpControl/setting/37/3",true);
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function isoMin(valeur)
+		{						
+			switch(valeur) {
+			  case 800:
+				isoMin_request.open("GET","http://10.5.5.9/gp/gpControl/setting/76/0",true);
+				break;
+			  case 400:
+				isoMin_request.open("GET","http://10.5.5.9/gp/gpControl/setting/76/1",true);
+				break;
+			  case 200:
+				isoMin_request.open("GET","http://10.5.5.9/gp/gpControl/setting/76/2",true);
+				break;
+			  case 100:
+				isoMin_request.open("GET","http://10.5.5.9/gp/gpControl/setting/76/3",true);			
+				break;
+			  default:
+				break;
+			}
+		}
+
+		function evSteps(valeur)
+		{						
+			switch(valeur) {
+			  case 0:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/0",true);
+				break;
+			  case 1:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/1",true);
+				break;
+			  case 2:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/2",true);
+				break;
+			  case 3:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/3",true);
+				break;
+			  case 4:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/4",true);
+				break;
+			  case 5:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/5",true);
+				break;
+			  case 6:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/6",true);
+				break;
+			  case 7:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/7",true);
+				break;
+			  case 8:
+				evSteps_request.open("GET","http://10.5.5.9/gp/gpControl/setting/39/8",true);
+				break;
+			  default:
+				break;
+			}
+		}
+	}
+    </script>
+  </head>
+  <body>
+    <header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">This webpage is a basic controller for your Gopro camera mounted on a Solo 3DR. You can set a trigger interval to take pictures and 
+simultaneously log the GPS time with the Emlid Reach M+, the logging interval error is within X ms.</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Tools</h4>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Upload file</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="gopro.html" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Weedee copter</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">GoPro Hero4 MULTISHOT settings</h1>
+	  <br><br>
+      <p class="lead text-muted">Please select one of the options below to change to another mode.</p>
+      <p>
+        <input id="videoPage" type="button" class="btn btn-primary my-2" value="Video" onClick="loadVideoPage();">
+	  	<input id="photoPage" type="button" class="btn btn-primary my-2" value="Photo" onClick="loadPhotoPage();">
+	  	<input id="multiShotPage" type="button" class="btn btn-primary my-2" value="MultiShot" onClick="loadMultiShotPage();">
+	  	<input id="surveyPage" type="button" class="btn btn-primary my-2" value="Survey" onClick="loadSurveyPage();">
+      </p>
+	  	<small class="text-muted">Your Gopro is in MultiShot burst mode.</small>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Burst</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Burst</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the secondary MultiShot mode on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="burstModeEnableButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set mode" onClick="sendRequestWithParams(\"burstModeEnabling\");">
+                </div>
+				<small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuBurst" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Rate<span class="caret"></span>
+					  </button>
+					  <ul id="burstModeEnable" class="dropdown-menu" aria-labelledby="dropdownMenuBurst">
+						<li data-value="1">3/1</li>
+						<li data-value="2">5/1</li>
+						<li data-value="3">10/1</li>
+						<li data-value="4">10/2</li>
+						<li data-value="5">10/3</li>
+						<li data-value="6">30/1</li>
+						<li data-value="7">30/2</li>
+						<li data-value="8">30/3</li>
+						<li data-value="9">30/6</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Timelapse</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Timelapse</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the secondary MultiShot mode on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="timelapseModeEnableButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set mode" onClick="sendRequestWithParams(\"timelapseModeEnabling\");">
+                </div>
+				<small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuTimelapse" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Interval<span class="caret"></span>
+					  </button>
+					  <ul id="timelapseModeEnable" class="dropdown-menu" aria-labelledby="dropdownMenuTimelapse">
+						<li data-value="0.5">0.5</li>
+						<li data-value="1">1</li>
+						<li data-value="2">2</li>
+						<li data-value="5">5</li>						
+						<li data-value="10">10</li>
+						<li data-value="30">30</li>
+						<li data-value="60">60</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>NightLapse</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">NightLapse</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the secondary MultiShot mode on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="nightlapseModeEnableButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set mode" onClick="sendRequestWithParams(\"nightlapseModeEnabling\");">
+                </div>
+				<small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuNightlapse" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Interval<span class="caret"></span>
+					  </button>
+					  <ul id="nightlapseModeEnable" class="dropdown-menu" aria-labelledby="dropdownMenuNightlapse">
+						<li data-value="0">Continuous</li>
+						<li data-value="1">4s</li>
+						<li data-value="2">5s</li>
+						<li data-value="3">10s</li>						
+						<li data-value="4">15s</li>
+						<li data-value="5">20s</li>
+						<li data-value="6">30s</li>
+						<li data-value="7">1m</li>
+						<li data-value="8">2m</li>						
+						<li data-value="9">5m</li>
+						<li data-value="10">30m</li>
+						<li data-value="11">60m</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Resolution</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Resolution</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo resolution on the GoPro.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="resolution" type="button" class="btn btn-sm btn-outline-secondary" value="Set" onClick="sendRequestWithParams(\"setResolution\");">
+                </div>
+				<small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuResolution" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Resolution<span class="caret"></span>
+					  </button>
+					  <ul id="setResolution" class="dropdown-menu" aria-labelledby="dropdownMenuResolution">
+						<li data-value="12">12MP Wide</li>
+						<li data-value="6">7MP Wide</li>
+						<li data-value="7">7MP Medium</li>
+						<li data-value="5">5MP Wide</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Spot Meter</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Spot Meter</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo spot meter On or OFF on the GoPro.</p>
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="btn-group">
+					  <input id="spotMeterOn" type="button" class="btn btn-sm btn-outline-secondary" value="On" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/33/1','spotMeterReturn','Spot meter On');">
+					  <input id="spotMeterOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/33/0','spotMeterReturn','Spot meter Off');">
+					</div>
+				<small class="text-muted"><p id="spotMeterReturn"></p></small>
+				</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>ProTune</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">ProTune</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo ProTune On or OFF on the GoPro.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="proTuneOn" type="button" class="btn btn-sm btn-outline-secondary" value="On" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/34/1','proTuneReturn','Pro tune On');">
+				  <input id="proTuneOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/34/0','proTuneReturn','Pro tune Off');">
+                </div>
+                <small class="text-muted"><p id="proTuneReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>White Balance</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">White Balance</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo white balance on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="whiteBalance" type="button" class="btn btn-sm btn-outline-secondary" value="Set" onClick="sendRequestWithParams(\"setWhiteBalance\");">
+				</div>
+                <small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuWhiteBalance" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">White Balance<span class="caret"></span>
+					  </button>
+					  <ul id="setWhiteBalance" class="dropdown-menu" aria-labelledby="dropdownMenuWhiteBalance">
+						<li data-value="0">Auto</li>
+						<li data-value="3000">3000k</li>
+						<li data-value="4000">4000k</li>
+						<li data-value="4800">4800k</li>
+						<li data-value="5500">5500k</li>
+						<li data-value="6000">6000k</li>
+						<li data-value="6500">6500k</li>
+						<li data-value="1">Native</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Color</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Color</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo color to gopro or flat on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="colorGopro" type="button" class="btn btn-sm btn-outline-secondary" value="Gopro" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/36/0','colorReturn','Color set to GoPro');">
+				  <input id="colorFlat" type="button" class="btn btn-sm btn-outline-secondary" value="Flat" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/36/1','colorReturn','Color set to Flat');">
+                </div>
+                <small class="text-muted"><p id="colorReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Sharpness</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Sharpness</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo sharpness to high, medium or low on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="sharpnessHigh" type="button" class="btn btn-sm btn-outline-secondary" value="High" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/38/0','sharpnessReturn','Sharpness set to high');">
+				  <input id="sharpnessMedium" type="button" class="btn btn-sm btn-outline-secondary" value="Medium" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/38/1','sharpnessReturn','Sharpness set to medium');">
+				  <input id="sharpnessLow" type="button" class="btn btn-sm btn-outline-secondary" value="Low" onClick="sendRequest('http://10.5.5.9/gp/gpControl/setting/38/2','sharpnessReturn','Sharpness set to low');">
+                </div>
+                <small class="text-muted"><p id="sharpnessReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>ISO Limit</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">ISO Limit<text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo ISO limit on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="isoLimitButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set" onClick="sendRequestWithParams(\"isoLimit\");">
+				</div>
+                <small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuISOLimit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">ISO Limit<span class="caret"></span>
+					  </button>
+					  <ul id="isoLimit" class="dropdown-menu" aria-labelledby="dropdownMenuISOLimit">
+						<li data-value="800">800</li>
+						<li data-value="400">400</li>
+						<li data-value="200">200</li>
+						<li data-value="100">100</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>ISO Min</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">ISO Min</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo ISO Min on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="isoMinButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set" onClick="sendRequestWithParams(\"isoMin\");">
+				</div>
+                <small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuISOMin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">ISO Min<span class="caret"></span>
+					  </button>
+					  <ul id="isoMin" class="dropdown-menu" aria-labelledby="dropdownMenuISOMin">
+						<li data-value="800">800</li>
+						<li data-value="400">400</li>
+						<li data-value="200">200</li>
+						<li data-value="100">100</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>EV Steps</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">EV Steps</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to set the photo EV Steps on the GoPro.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<input id="evStepButton" type="button" class="btn btn-sm btn-outline-secondary" value="Set" onClick="sendRequestWithParams(\"evSteps\");">
+				</div>
+                <small class="text-muted">
+					<div class="dropdown">
+					  <button class="btn btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuEVSteps" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">EV Steps<span class="caret"></span>
+					  </button>
+					  <ul id="evSteps" class="dropdown-menu" aria-labelledby="dropdownMenuEVSteps">
+						<li data-value="0">+2</li>
+						<li data-value="1">+1.5</li>
+						<li data-value="2">+1</li>
+						<li data-value="3">+0.5</li>
+						<li data-value="4">0</li>
+						<li data-value="5">-0.5</li>
+						<li data-value="6">-1</li>
+						<li data-value="7">-1.5</li>
+						<li data-value="8">-2</li>
+					  </ul>
+					</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    <p><p>
+    <p></p>
+  </div>
+</footer>
+<script src="jquery-3.3.1.slim.min.js"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="bootstrap.bundle.min.js"></script></body>
+</html>

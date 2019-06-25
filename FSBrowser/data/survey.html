@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Patrick Duhaime, Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Solo 3DR - Emlid Reach M+ controller</title>
+
+
+    <!-- Bootstrap core CSS -->
+	<link href="bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="solo3DR.css" rel="stylesheet">
+	<script type="text/javascript" src="solo3DR.js"></script>
+		<script>
+	window.onload = function(){ 
+		
+		var button = document.getElementById('surveyStart');
+		button.onclick = startEmlidSurvey;
+
+		var button = document.getElementById('surveyStop');
+		button.onclick = stopEmlidSurvey;
+		
+		let range = document.getElementById('slider');
+		slider.onchange=function() {
+			var x = document.getElementById("slider").value;
+			document.getElementById('range').innerHTML = x;
+		} 
+	}
+    </script>
+	<script>
+	
+		function sleep(ms) {
+		
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+		
+		function startEmlidSurvey(){
+		
+			var shutterInterval = document.getElementById("slider").value;
+			var offsetDelay = document.getElementById("offsetTextBox").value;
+			var emlidTriggerOnDelay = document.getElementById("OnDelayTextBox").value;
+			
+			document.getElementById("emlidSurveyReturn").innerHTML = "Survey running at: " + shutterInterval + " seconds interval.";
+			
+			if(offsetDelay==null || offsetDelay==""){
+				offsetDelay = 0;
+			}
+			if(emlidTriggerOnDelay==null || emlidTriggerOnDelay==""){
+				emlidTriggerOnDelay = 0;
+			}
+			var surveyStart_request = new XMLHttpRequest();
+			surveyStart_request.open("GET","http://10.5.5.5/surveyStart?shutterInterval=" + shutterInterval + "&offsetDelay=" + offsetDelay + "&emlidTriggerOnDelay="  + emlidTriggerOnDelay,true);
+			surveyStart_request.send();
+		}
+		
+		async function stopEmlidSurvey(){
+	
+			document.getElementById("emlidSurveyReturn").innerHTML = "Survey stopped...";
+			await sleep(3000);
+			document.getElementById("emlidSurveyReturn").innerHTML = "";
+			
+			var surveyStop_request = new XMLHttpRequest();
+			surveyStop_request.open("GET","http://10.5.5.5/surveyStop",true);
+			surveyStop_request.send();
+		}
+	</script>
+  </head>
+  <body>
+    <header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">This webpage is a basic controller for your Gopro camera mounted on a Solo 3DR. You can set a trigger interval to take pictures and 
+simultaneously log the GPS time with the Emlid Reach M+, the logging interval error is within X ms.</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Tools</h4>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Upload file</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="gopro.html" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Weedee copter</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">GoPro Hero4 SURVEY settings</h1>
+	  <br><br>
+      <p class="lead text-muted">Please select one of the options below to change to another mode.</p>
+      <p>
+        <input id="videoPage" type="button" class="btn btn-primary my-2" value="Video" onClick="loadVideoPage();">
+	  	<input id="photoPage" type="button" class="btn btn-primary my-2" value="Photo" onClick="loadPhotoPage();">
+	  	<input id="multiShotPage" type="button" class="btn btn-primary my-2" value="MultiShot" onClick="loadMultiShotPage();">
+	  	<input id="surveyPage" type="button" class="btn btn-primary my-2" value="Survey" onClick="loadSurveyPage();">
+      </p>
+	  	<small class="text-muted">Your Gopro is in single shot photo mode - 12 MP resolution.</small>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="card xl-6 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Survey settings</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Survey settings</text></svg>
+            <div class="card-body">
+              <p class="card-text">Here you can set timelapse between the captures from 1.2 to 4 seconds, the saving time to the SD card on the GoPro is preventing shorter periods.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <form class="range-field my-5">
+				  <div class="btn-group">
+					<input id="slider" class="no-border" type="range" value="1.2" min="1.2" max="4" step="0.1" style="width: 380px;">
+					&nbsp;&nbsp;
+					<p for="slider" id="range" class="font-weight-bold indigo-text ml-2 mt-1" style="color:#55595c;">1.2</p>
+					<span class="font-weight-bold indigo-text ml-2 mt-1" style="color:#55595c;">seconds</span>
+				  </div>
+				</form>
+                <small class="text-muted">
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-xl-6">
+          <div class="card xl-6 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Survey time collection start</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Survey Start/Stop</text></svg>
+            <div class="card-body">
+              <p class="card-text">This is to start or stop the surveying capture on the GoPro and the Emlid Reach M+.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+					<small class="text-muted"><p id="emlidSurveyReturn"></p></small>
+                </div>
+                <small class="text-muted">
+				<div class="btn-group">
+				  <input id="surveyStart" type="button" class="btn btn-sm btn-outline-secondary" value="Start" onClick="startEmlidSurvey();">
+				  <input id="surveyStop" type="button" class="btn btn-sm btn-outline-secondary" value="Stop" onClick="stopEmlidSurvey();">
+				</div>
+				</small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-md-6">
+          <div class="card mb-6 shadow-sm">
+            <div class="card-body">
+              <p class="card-text">You can enter a positive value to tweak the offset between the GoPro shutter command and the Emlid Reach M+ trigging command.</p><br><br>
+              <div class="d-flex justify-content-between align-items-center">
+				<small class="text-muted"><p id="offsetDelayReturn"><div class="form-group">
+				<input type="text" class="form-control" id="offsetTextBox" name="offsetTextBox" placeholder=" Enter offset in ms." required="required"></div></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-md-6">
+          <div class="card mb-6 shadow-sm">
+            <div class="card-body">
+              <p class="card-text">You can enter a positive value to set for how long the Emlid Reach M+ trigging pin will stay high. There is already a minimum delay of 2 ms hard coded.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+				<small class="text-muted"><p id="emlidTriggerOnDelayReturn"><div class="form-group">
+				<input type="text" class="form-control" id="OnDelayTextBox" name="OnDelayTextBox" placeholder=" Enter delay in ms." required="required"></div></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    <p><p>
+    <p></p>
+  </div>
+</footer>
+<script src="jquery-3.3.1.slim.min.js"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="bootstrap.bundle.min.js"></script></body>
+</html>

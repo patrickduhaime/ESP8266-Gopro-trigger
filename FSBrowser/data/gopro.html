@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Patrick Duhaime, Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+    <title>Solo 3DR - Emlid Reach M+ controller</title>
+
+
+    <!-- Bootstrap core CSS -->
+	<link href="bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="solo3DR.css" rel="stylesheet">
+	<script type="text/javascript" src="solo3DR.js"></script>
+	<script>
+	window.onload = function(){ 
+	
+	var button = document.getElementById('videoPage');
+	button.onclick = loadVideoPage;
+	
+	var button = document.getElementById('photoPage');
+	button.onclick = loadPhotoPage;
+	
+	var button = document.getElementById('multiShotPage');
+	button.onclick = loadMultiShotPage;
+	
+	var button = document.getElementById('surveyPage');
+	button.onclick = loadSurveyPage;
+	
+	var button = document.getElementById('poweroff');
+	button.onclick = poweroff;
+	
+	var button = document.getElementById('poweron');
+	button.onclick = poweron;
+	
+	var button = document.getElementById('pairingStart');
+	button.onclick = pairingStart;
+	
+	var button = document.getElementById('pairingFinish');
+	button.onclick = pairingFinish;
+	
+	var button = document.getElementById('bootModeVideo');
+	button.onclick = bootModeVideo;
+	
+	var button = document.getElementById('bootModePhoto');
+	button.onclick = bootModePhoto;
+	
+	var button = document.getElementById('bootModeMultiShot');
+	button.onclick = bootModeMultiShot;
+	
+	var button = document.getElementById('beepOff');
+	button.onclick = beepOff;
+	
+	var button = document.getElementById('beep70');
+	button.onclick = beep70;
+	
+	var button = document.getElementById('beepFull');
+	button.onclick = beepFull;
+	
+	var button = document.getElementById('blink2');
+	button.onclick = blink2;
+	
+	var button = document.getElementById('blink4');
+	button.onclick = blink4;
+	
+	var button = document.getElementById('blinkOff');
+	button.onclick = blinkOff;
+	
+	var button = document.getElementById('locateOn');
+	button.onclick = locateOn;
+	
+	var button = document.getElementById('locateOff');
+	button.onclick = locateOff;
+	
+	var button = document.getElementById('quickCaptureOn');
+	button.onclick = quickCaptureOn;
+	
+	var button = document.getElementById('quickCaptureOff');
+	button.onclick = quickCaptureOff;
+	
+	var button = document.getElementById('SSIDName');
+	button.onclick = changeSSIDName;
+	
+	var button = document.getElementById('SSIDPassword');
+	button.onclick = changeSSIDPassword;
+
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+	
+	async function poweron(){
+		
+		<!-- TODO -- Wakeup On LAN see: https://www.instructables.com/id/Arduino-GoPro-Wifi-Control/  -->
+		document.getElementById("powerReturn").innerHTML = "Power On sent";
+		await sleep(3000);
+		document.getElementById("powerReturn").innerHTML = "";
+	}
+	
+	async function poweroff(){
+		
+		var poweroff_request = new XMLHttpRequest();
+		
+		poweroff_request.open("GET","http://10.5.5.9/gp/gpControl/command/system/sleep",true);
+		poweroff_request.send();
+
+		document.getElementById("powerReturn").innerHTML = "Power Off sent";
+		await sleep(3000);
+		document.getElementById("powerReturn").innerHTML = "";
+	}
+	
+	async function pairingStart(){
+		
+		var PIN = document.getElementById("pairingPIN"); <!-- get PIN from textfield -->
+		var pairingStart_request = new XMLHttpRequest();
+		
+		pairingStart_request.open("GET","https://10.5.5.9/gpPair?c=start&pin=" + PIN +"&mode=0",true);
+		pairingStart_request.send();
+		
+		document.getElementsByName('pairingPIN')[0].placeholder='Pairing started';
+		await sleep(3000);
+		document.getElementsByName('pairingPIN')[0].placeholder='';
+	}
+	
+	async function pairingFinish(){
+		
+		<!-- TODO -- textfield to get PIN pairing code -->
+		var PIN = "XXXX"; <!-- get PIN from textfield -->
+		var pairingFinished_request = new XMLHttpRequest();
+		
+		pairingFinished_request.open("GET","https://10.5.5.9/gpPair?c=finish&pin=" + PIN +"&mode=0",true);
+		pairingFinished_request.send();
+		
+		document.getElementsByName('pairingPIN')[0].placeholder='Pairing finished';
+		await sleep(3000);
+		document.getElementsByName('pairingPIN')[0].placeholder='';
+	}
+	
+	async function changeSSIDName(){
+		
+		var name = "XXXX"; <!-- TODO get name from textfield -->
+		var changeSSIDName_request = new XMLHttpRequest();
+		
+		changeSSIDName_request.open("GET","http://10.5.5.9/gp/gpControl/command/wireless/ap/ssid?ssid=GOPRONAME" + name,true);
+		changeSSIDName_request.send();
+		
+		document.getElementsByName('SSIDNameReturn')[0].placeholder='Wifi name changed';
+		await sleep(3000);
+		document.getElementsByName('SSIDNameReturn')[0].placeholder='';
+	}
+	
+	async function changeSSIDPassword(){
+		
+		var password = "XXXX"; <!-- TODO get password from textfield -->
+		var name = "YYYY";  <!-- TODO get SSID name -->
+		var changeSSIDPassword_request = new XMLHttpRequest();
+		
+		changeSSIDPassword_request.open("GET","http://10.5.5.9/gp/gpControl/command/wireless/ap/ssid?ssid=" + name + "&pw=" + password,true);
+		changeSSIDPassword_request.send();
+		
+		document.getElementsByName('SSIDPasswordReturn')[0].placeholder='Password changed';
+		await sleep(3000);
+		document.getElementsByName('SSIDPasswordReturn')[0].placeholder='';
+	}
+	
+	async function bootModeVideo(){
+		
+		var bootModeVideo_request = new XMLHttpRequest();
+		
+		bootModeVideo_request.open("GET"," http://10.5.5.9/gp/gpControl/setting/53/0",true);
+		bootModeVideo_request.send();
+
+		document.getElementById("bootModeReturn").innerHTML = "Video boot mode";
+		await sleep(3000);
+		document.getElementById("bootModeReturn").innerHTML = "";
+	}
+	
+	async function bootModePhoto(){
+		
+		var bootModePhoto_request = new XMLHttpRequest();
+		
+		bootModePhoto_request.open("GET","http://10.5.5.9/gp/gpControl/setting/53/1",true);
+		bootModePhoto_request.send();
+
+		document.getElementById("bootModeReturn").innerHTML = "Photo boot mode";
+		await sleep(3000);
+		document.getElementById("bootModeReturn").innerHTML = "";
+	}
+	
+	async function bootModeMultiShot(){
+		
+		var bootModeMultiShot_request = new XMLHttpRequest();
+		
+		bootModeMultiShot_request.open("GET","http://10.5.5.9/gp/gpControl/setting/53/2",true);
+		bootModeMultiShot_request.send();
+
+		document.getElementById("bootModeReturn").innerHTML = "MultiShot boot mode";
+		await sleep(3000);
+		document.getElementById("bootModeReturn").innerHTML = "";
+	}
+	
+	async function beepOff(){
+		
+		var beepOff_request = new XMLHttpRequest2();
+		
+		beepOff_request.open("GET","http://10.5.5.9/gp/gpControl/setting/56/2",true);
+		beepOff_request.send();
+
+		document.getElementById("beepReturn").innerHTML = "Beep Off sent";
+		await sleep(3000);
+		document.getElementById("powerReturn").innerHTML = "";
+	}
+	
+	async function beep70(){
+		
+		var beep70_request = new XMLHttpRequest();
+		
+		beep70_request.open("GET","http://10.5.5.9/gp/gpControl/setting/56/1",true);
+		beep70_request.send();
+
+		document.getElementById("beepReturn").innerHTML = "Beep 70% sent";
+		await sleep(3000);
+		document.getElementById("beepReturn").innerHTML = "";
+	}
+	
+	async function beepFull(){
+		
+		var beepFull_request = new XMLHttpRequest();
+		
+		beepFull_request.open("GET","http://10.5.5.9/gp/gpControl/setting/56/0",true);
+		beepFull_request.send();
+
+		document.getElementById("beepReturn").innerHTML = "Beep full sent";
+		await sleep(3000);
+		document.getElementById("beepReturn").innerHTML = "";
+	}
+	
+	async function blink2(){
+		
+		var blink2_request = new XMLHttpRequest();
+		
+		blink2_request.open("GET","http://10.5.5.9/gp/gpControl/setting/55/1",true);
+		blink2_request.send();
+
+		document.getElementById("blinkReturn").innerHTML = "Blink 2 sent";
+		await sleep(3000);
+		document.getElementById("blinkReturn").innerHTML = "";
+	}
+	
+	async function blink4(){
+		
+		var blink4_request = new XMLHttpRequest();
+		
+		blink4_request.open("GET","http://10.5.5.9/gp/gpControl/setting/55/2",true);
+		blink4_request.send();
+
+		document.getElementById("blinkReturn").innerHTML = "Blink 4 sent";
+		await sleep(3000);
+		document.getElementById("blinkReturn").innerHTML = "";
+	}
+	
+	async function blinkOff(){
+		
+		var blinkOff_request = new XMLHttpRequest();
+		
+		blinkOff_request.open("GET","http://10.5.5.9/gp/gpControl/setting/55/0",true);
+		blinkOff_request.send();
+
+		document.getElementById("blinkReturn").innerHTML = "Blink Off sent";
+		await sleep(3000);
+		document.getElementById("blinkReturn").innerHTML = "";
+	}
+	
+	async function locateOn(){
+		
+		var locateOn_request = new XMLHttpRequest();
+		
+		locateOn_request.open("GET","http://10.5.5.9/gp/gpControl/command/system/locate?p=1",true);
+		locateOn_request.send();
+
+		document.getElementById("locateReturn").innerHTML = "locate On sent";
+		await sleep(3000);
+		document.getElementById("locateReturn").innerHTML = "";
+	}
+	
+	async function locateOff(){
+		
+		var locateOff_request = new XMLHttpRequest();
+		
+		locateOff_request.open("GET","http://10.5.5.9/gp/gpControl/command/system/locate?p=0",true);
+		locateOff_request.send();
+
+		document.getElementById("locateReturn").innerHTML = "Locate Off sent";
+		await sleep(3000);
+		document.getElementById("locateReturn").innerHTML = "";
+	}
+	
+	async function quickCaptureOn(){
+		
+		var quickCaptureOn_request = new XMLHttpRequest();
+		
+		quickCaptureOn_request.open("GET","http://10.5.5.9/gp/gpControl/setting/54/1",true);
+		quickCaptureOn_request.send();
+
+		document.getElementById("quickCaptureReturn").innerHTML = "locate On sent";
+		await sleep(3000);
+		document.getElementById("quickCaptureReturn").innerHTML = "";
+	}
+	
+	async function quickCaptureOff(){
+		
+		var quickCaptureOff_request = new XMLHttpRequest();
+		
+		quickCaptureOff_request.open("GET","http://10.5.5.9/gp/gpControl/setting/54/0",true);
+		quickCaptureOff_request.send();
+
+		document.getElementById("quickCaptureReturn").innerHTML = "Locate Off sent";
+		await sleep(3000);
+		document.getElementById("quickCaptureReturn").innerHTML = "";
+	}
+}	
+	</script>
+  </head>
+  <body>
+    <header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">This webpage is a basic controller for your Gopro camera mounted on a Solo 3DR. You can set a trigger interval to take pictures and 
+simultaneously log the GPS time with the Emlid Reach M+, the logging interval error is within X ms.</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Tools</h4>
+          <ul class="list-unstyled">
+            <li><a href="gopro.html" class="text-white">Upload file</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Weedee copter</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+<main role="main">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">GoPro Hero4 (Silver) settings</h1>
+	  <br><br>
+      <p class="lead text-muted">To begin please select one of the options below.</p>
+      <p>
+	  	<input id="videoPage" type="button" class="btn btn-primary my-2" value="Video" onClick="loadVideoPage();">
+	  	<input id="photoPage" type="button" class="btn btn-primary my-2" value="Photo" onClick="loadPhotoPage();">
+	  	<input id="multiShotPage" type="button" class="btn btn-primary my-2" value="MultiShot" onClick="loadMultiShotPage();">
+	  	<input id="surveyPage" type="button" class="btn btn-primary my-2" value="Survey" onClick="loadSurveyPage();">
+      </p>
+		<small class="text-muted">Or you can change the general GoPro settings on this page.</small>
+    </div>
+  </section>
+<div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Power</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Power</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to turn the camera On or OFF, Wifi on the camera needs to be enabled to power On.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="poweron" type="button" class="btn btn-sm btn-outline-secondary" value="On" onClick="poweron();">
+				  <input id="poweroff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="poweroff();">
+                </div>
+				<small class="text-muted"><p id="powerReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Pairing</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Pairing</text></svg>
+            <div class="card-body">
+              <p class="card-text">Enter the pairing number and click on start. Once pairing is done on the GoPro, click on finish.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="pairingStart" type="button" class="btn btn-sm btn-outline-secondary" value="Start" onClick="pairingstart();">
+				  <input id="pairingFinish" type="button" class="btn btn-sm btn-outline-secondary" value="Finish" onClick="pairingfinish();">
+                </div>
+				<small class="text-muted"><p id="pairingReturn"><div class="form-group">			
+				<input type="text" class="form-control" id="pairingPIN" name="pairingPIN" placeholder="Pairing PIN" required>
+			  </div></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Default Boot Mode</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".4em">Default Boot Mode</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is used to change the default boot mode of the camera. There are 3 possible modes.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="bootModeVideo" type="button" class="btn btn-sm btn-outline-secondary" value="Video" onClick="bootModeVideo();">
+				  <input id="bootModePhoto" type="button" class="btn btn-sm btn-outline-secondary" value="Photo" onClick="bootModePhoto();">
+				  <input id="bootModeMultiShot" type="button" class="btn btn-sm btn-outline-secondary" value="MultiShot" onClick="bootModeMultiShot();">
+                </div>
+                <small class="text-muted"><p id="bootModeReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>		
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Wifi name</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Wifi name</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to change the Wifi name. Enter the name in the textfeild and click on change.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="SSIDName" type="button" class="btn btn-sm btn-outline-secondary" value="Change" onClick="changeSSIDName();">
+                </div>
+				<small class="text-muted"><p id="SSIDNameReturn"><div class="form-group">
+				<input type="text" class="form-control" id="SSIDName1" name="SSIDNameReturn" placeholder="Enter new Wifi name" required="required"></div></p></small>
+              </div>
+            </div>
+          </div>
+        </div>		
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Wifi password</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Wifi password</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to change the Wifi password. Enter the password in the textfeild and click on change.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="SSIDPassword" type="button" class="btn btn-sm btn-outline-secondary" value="Change" onClick="changeSSIDPassword();">
+                </div>
+				<small class="text-muted"><p id="SSIDPasswordReturn"><div class="form-group">
+				<input type="text" class="form-control" id="SSIDPassword1" name="SSIDPasswordReturn" placeholder="Enter new Wifi password" required></div></p></small>
+              </div>
+            </div>
+          </div>
+        </div>		
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Quick Capture</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Quick Capture</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to turn Quick Capture On or Off.</p><br></br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="quickCaptureOn" type="button" class="btn btn-sm btn-outline-secondary" value="On" onClick="quickCaptureOn();">
+				  <input id="quickCaptureOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="quickCaptureOff();">
+                </div>
+                <small class="text-muted"><p id="quickCaptureReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>        
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Beeps</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Beeps</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting is to turn the camera beeps full, off, or 70%.</p><br></br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="beepFull" type="button" class="btn btn-sm btn-outline-secondary" value="Full" onClick="beepFull();">
+				  <input id="beep70" type="button" class="btn btn-sm btn-outline-secondary" value="70%" onClick="beep70();">
+				  <input id="beepOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="beepOff();">
+                </div>
+                <small class="text-muted"><p id="beepReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>		
+		<div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>LED Blink</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">LED Blink</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting will set the blinking of the led on the camera.</p><br></br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="blink2" type="button" class="btn btn-sm btn-outline-secondary" value="2" onClick="blink2();">
+				  <input id="blink4" type="button" class="btn btn-sm btn-outline-secondary" value="4" onClick="blink4();">
+				  <input id="blinkOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="blinkOff();">
+                </div>
+				<small class="text-muted"><p id="blinkReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Locate</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Locate</text></svg>
+            <div class="card-body">
+              <p class="card-text">This setting when put to On will trig the camera beep and led to help you find the camera.</p><br>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+				  <input id="locateOn" type="button" class="btn btn-sm btn-outline-secondary" value="On" onClick="locateOn();">
+				  <input id="locateOff" type="button" class="btn btn-sm btn-outline-secondary" value="Off" onClick="locateOff();">
+                </div>
+				<small class="text-muted"><p id="locateReturn"></p></small>
+              </div>
+            </div>
+          </div>
+        </div>		
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    <p><p>
+    <p></p>
+  </div>
+</footer>
+<script src="jquery-3.3.1.slim.min.js"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="bootstrap.bundle.min.js"></script></body>
+</html>
